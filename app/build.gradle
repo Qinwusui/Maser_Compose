@@ -1,0 +1,182 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlinx-serialization'
+    id 'com.mob.sdk'
+}
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdk 33
+    signingConfigs {
+        config {
+            enableV3Signing true
+            enableV4Signing true
+        }
+        release {
+            storeFile file('D:\\yu.jks')
+            storePassword 'Qinsansui233...'
+            keyAlias 'wusui'
+            keyPassword 'Qinsansui233...'
+        }
+    }
+    defaultConfig {
+        applicationId "com.wusui.server"
+        minSdk 23
+        targetSdk 33
+        versionCode 1
+        versionName "4.02"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+            sourceSets {
+                main {
+                    jni.srcDirs = [] //禁用gradle编译jni
+                    jniLibs.srcDirs = ['libs'] // libs为so文件所在包路径
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            signingConfig signingConfigs.release
+            zipAlignEnabled true     //Zipalign优化
+            shrinkResources true    // 移除无用的resource文件
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            zipAlignEnabled false//Zipalign优化
+            shrinkResources false// 移除无用的resource文件
+
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//            debuggable false
+//            jniDebuggable false
+//            renderscriptDebuggable false
+//            signingConfig signingConfigs.release
+//            zipAlignEnabled true     //Zipalign优化
+//            shrinkResources true    // 移除无用的resource文件
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+//        useIR=true
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.3.1"
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation "androidx.compose.ui:ui:1.3.0-beta03"
+    implementation "androidx.compose.material:material:1.3.0-beta03"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.3.0-beta03"
+    implementation 'androidx.activity:activity-compose:1.6.0'
+//    implementation files('libs/MiPush_SDK_Client_5_0_5-C.jar')
+    implementation project(path: ':vpnLib')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.3.0-beta03"
+    debugImplementation "androidx.compose.ui:ui-tooling:1.3.0-beta03"
+
+    implementation 'com.blankj:utilcodex:1.31.0'
+    def lifecycle_version = "2.6.0-alpha02"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+    implementation("androidx.compose.runtime:runtime-livedata:1.3.0-beta03")
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    // Annotation processor
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.compose.runtime:runtime:1.3.0-beta03"
+    implementation "androidx.compose.material:material:1.3.0-beta03"
+    implementation "androidx.compose.foundation:foundation:1.3.0-beta03"
+    implementation "androidx.compose.animation:animation:1.3.0-beta03"
+//    implementation "androidx.fragment:fragment-ktx:1.4.1"
+
+//    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+//    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //PagerView And Glide
+    implementation 'com.google.accompanist:accompanist-pager:0.26.0-alpha'
+    implementation 'io.coil-kt:coil-compose:2.1.0'
+    //systemuicontroller
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.18.0'
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.26.0-alpha'
+
+    implementation "androidx.navigation:navigation-compose:2.6.0-alpha01"
+//    runtimeOnly("io.ktor:ktor-client-core:2.0.0-ide-debug-eap-225")
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha16"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.0"
+    //小组件
+//    implementation "androidx.glance:glance:1.0.0-alpha03"
+//    def work_version = "2.7.1"
+//
+//    // (Java only)
+////    implementation "androidx.work:work-runtime:$work_version"
+//
+//    // Kotlin + coroutines
+//    implementation "androidx.work:work-runtime-ktx:$work_version"
+    //Ktor
+    implementation "io.ktor:ktor-client-android:2.0.3"
+    implementation 'io.ktor:ktor-client-content-negotiation:2.0.3'
+    implementation 'io.ktor:ktor-client-gson:2.0.3'
+    runtimeOnly "io.ktor:ktor-client-core:2.0.3"
+    implementation 'io.ktor:ktor-client-serialization:2.0.3'
+    implementation "io.ktor:ktor-serialization-gson:2.0.3"
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+//    implementation "io.ktor:ktor-serialization-kotlinx-json:2.0.3"
+    implementation 'com.github.tapadoo:alerter:7.2.4'
+    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21"
+}
+
+MobSDK {
+    appKey "367a3b20e615a"
+    appSecret "013830b877671b48cce021a48871c8b0"
+    MobPush {
+    }
+}
